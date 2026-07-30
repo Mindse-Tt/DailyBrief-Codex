@@ -23,6 +23,20 @@
 
 ---
 
+## Codex 本地无 Key 版
+
+这份 fork 已补充 Codex 本地运行包装：默认使用 `npm run codex:daily`，由 Codex/自动任务负责每天触发和汇报，日报生成走本机已登录的 CLI 后端，不需要额外配置 LLM API Key。
+
+```bash
+npm install
+cp codex.env.example .env.local
+npm run codex:daily
+```
+
+详细说明见 [`CODEX.md`](CODEX.md)。
+
+---
+
 ## ✨ 核心特性
 
 - **🌍 全网多源聚合**：默认启用 26 个数据源，覆盖硅谷科技、AI 前沿、全球财经、国际时政、中文社区，一份报告通吃
