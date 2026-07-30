@@ -44,6 +44,39 @@ Use a Codex cron automation with this workspace and prompt:
 
 Recommended schedule: every day at 08:30 Asia/Shanghai.
 
+## Codex Skill
+
+This repository includes an installable skill at:
+
+```text
+skills/dailybrief-codex/
+```
+
+Install or copy that folder into your Codex skills directory:
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R skills/dailybrief-codex ~/.codex/skills/
+```
+
+Then ask Codex:
+
+```text
+用 dailybrief-codex 跑今天日报并总结给我。
+```
+
+The same skill is also published separately at:
+
+```text
+https://github.com/Mindse-Tt/DailyBrief-Codex-Skill
+```
+
+And collected in:
+
+```text
+https://github.com/Mindse-Tt/xuwei_tools
+```
+
 ## Why Not API Keys
 
 The source fetchers use public RSS/JSON endpoints. For the LLM step, local mode

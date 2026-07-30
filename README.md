@@ -33,7 +33,7 @@ cp codex.env.example .env.local
 npm run codex:daily
 ```
 
-详细说明见 [`CODEX.md`](CODEX.md)。
+详细说明见 [`CODEX.md`](CODEX.md)。如果想把它作为 Codex Skill 调用，本仓库已内置 [`skills/dailybrief-codex/`](skills/dailybrief-codex/)；也可以单独安装公开 Skill 仓库 [`Mindse-Tt/DailyBrief-Codex-Skill`](https://github.com/Mindse-Tt/DailyBrief-Codex-Skill)。它同时收录在我的工具合集 [`xuwei_tools`](https://github.com/Mindse-Tt/xuwei_tools)。
 
 ---
 
