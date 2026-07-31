@@ -1,6 +1,7 @@
 # DailyBrief for Codex
 
-This fork is packaged for a local Codex daily workflow:
+This project is packaged for a local Codex daily workflow owned and maintained
+by Mindse-Tt:
 
 - no news-source API keys
 - no LLM API keys by default
@@ -97,10 +98,10 @@ the matching provider key.
 
 ## GitHub Actions Boundary
 
-The bundled GitHub workflow is manual-only in this fork. Scheduled Actions are
-disabled because GitHub-hosted runners cannot access the user's local CLI login;
-without a cloud LLM API key, scheduled cloud runs fail before report generation.
-Keep the daily schedule in Codex automation for the no-key workflow.
+The bundled GitHub workflow is manual-only in this project. Scheduled Actions
+are disabled because GitHub-hosted runners cannot access the user's local CLI
+login; without a cloud LLM API key, scheduled cloud runs fail before report
+generation. Keep the daily schedule in Codex automation for the no-key workflow.
 
 ## Codex CLI Note
 

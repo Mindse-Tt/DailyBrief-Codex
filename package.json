@@ -1,6 +1,7 @@
 {
-  "name": "daily-brief",
+  "name": "dailybrief-codex",
   "version": "0.1.0",
+  "author": "Mindse-Tt",
   "private": true,
   "scripts": {
     "dry-run": "tsx scripts/dry-run.ts",

@@ -10,6 +10,7 @@
 
 <p>
   <img src="https://img.shields.io/badge/Codex-first-111827?style=for-the-badge" alt="Codex first">
+  <img src="https://img.shields.io/badge/maintainer-Mindse--Tt-0f766e?style=for-the-badge" alt="Maintainer Mindse-Tt">
   <img src="https://img.shields.io/badge/default-no%20LLM%20API%20Key-16a34a?style=for-the-badge" alt="No LLM API key by default">
   <img src="https://img.shields.io/badge/archive-Desktop%20DailyBrief-2563eb?style=for-the-badge" alt="Desktop archive">
   <img src="https://img.shields.io/badge/Node-20%2B-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node 20+">
@@ -20,9 +21,19 @@
 
 ---
 
+## 👤 项目主理
+
+DailyBrief-Codex 由 **许惟 / Mindse-Tt** 主导整理、改造和维护，核心目标是把每日情报流变成一个能被 Codex 持续调用的个人工作系统。
+
+Claude / Codex 参与了本地运行包装、README 体系化、Skill 封装、桌面归档和故障排查流程的协作实现。
+
+项目保留 MIT 许可；许可证文件中保留必要版权声明，同时标注 DailyBrief-Codex 改造部分的维护归属。当前维护信息见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
+
+---
+
 ## ✨ 这个版本做了什么
 
-DailyBrief-Codex 不是简单搬运一个日报项目，而是把它改成更适合个人 Agent 工作流的形态：
+DailyBrief-Codex 的重点不是“复刻一个日报页面”，而是把资讯抓取、模型摘要、市场信号、桌面归档和 Codex 调用串成一条稳定链路：
 
 | 能力 | DailyBrief-Codex 的做法 |
 |---|---|
