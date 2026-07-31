@@ -9,7 +9,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,17 +24,55 @@ const env = {
   OUTPUT_MARKDOWN: process.env.OUTPUT_MARKDOWN || "true",
 };
 
-function run(cmd, args) {
-  console.log(`\n[codex-daily] $ ${cmd} ${args.join(" ")}`);
-  const result = spawnSync(cmd, args, {
-    cwd: projectRoot,
-    env,
-    shell: process.platform === "win32",
-    stdio: "inherit",
+function nowTime() {
+  return new Date().toTimeString().slice(0, 8);
+}
+
+function createLogStream(date) {
+  const logDir = path.join(projectRoot, "logs");
+  fs.mkdirSync(logDir, { recursive: true });
+  const logFile = path.join(logDir, `daily-${date}.log`);
+  const logStream = fs.createWriteStream(logFile, { flags: "a" });
+  logStream.write(`\n[${nowTime()}] codex-daily start\n`);
+  return { logFile, logStream };
+}
+
+function logLine(logStream, message) {
+  console.log(message);
+  logStream.write(`${message}\n`);
+}
+
+function run(cmd, args, logStream) {
+  const command = `${cmd} ${args.join(" ")}`;
+  logLine(logStream, `\n[codex-daily] $ ${command}`);
+
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, {
+      cwd: projectRoot,
+      env,
+      shell: process.platform === "win32",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+
+    child.stdout.on("data", (chunk) => {
+      process.stdout.write(chunk);
+      logStream.write(chunk);
+    });
+
+    child.stderr.on("data", (chunk) => {
+      process.stderr.write(chunk);
+      logStream.write(chunk);
+    });
+
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`${command} exited ${code}`));
+      }
+    });
   });
-  if (result.status !== 0) {
-    throw new Error(`${cmd} ${args.join(" ")} exited ${result.status}`);
-  }
 }
 
 function todayKey(tz) {
@@ -77,15 +115,24 @@ function printSummary(date) {
   if (fs.existsSync(mdPath)) console.log(`markdown: ${mdPath}`);
 }
 
+const date = todayKey(env.REPORT_TZ);
+const { logFile, logStream } = createLogStream(date);
+
 try {
-  console.log("[codex-daily] local API-key-free mode");
-  console.log(`[codex-daily] LLM_BACKEND=${env.LLM_BACKEND}`);
-  console.log(`[codex-daily] REPORT_LOCALE=${env.REPORT_LOCALE}`);
-  console.log(`[codex-daily] REPORT_TZ=${env.REPORT_TZ}`);
-  run("npm", ["run", "daily"]);
-  run("npm", ["run", "build-site"]);
+  logLine(logStream, "[codex-daily] local API-key-free mode");
+  logLine(logStream, `[codex-daily] LLM_BACKEND=${env.LLM_BACKEND}`);
+  logLine(logStream, `[codex-daily] REPORT_LOCALE=${env.REPORT_LOCALE}`);
+  logLine(logStream, `[codex-daily] REPORT_TZ=${env.REPORT_TZ}`);
+  logLine(logStream, `[codex-daily] log=${logFile}`);
+  await run("npm", ["run", "daily"], logStream);
+  await run("npm", ["run", "build-site"], logStream);
   printSummary(todayKey(env.REPORT_TZ));
+  logStream.write(`[${nowTime()}] codex-daily OK\n`);
 } catch (err) {
-  console.error("[codex-daily] FAILED:", err instanceof Error ? err.message : String(err));
-  process.exit(1);
+  const message = err instanceof Error ? err.message : String(err);
+  console.error("[codex-daily] FAILED:", message);
+  logStream.write(`[${nowTime()}] codex-daily FAILED: ${message}\n`);
+  process.exitCode = 1;
+} finally {
+  logStream.end();
 }

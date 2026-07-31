@@ -83,6 +83,13 @@ The source fetchers use public RSS/JSON endpoints. For the LLM step, local mode
 reuses the machine's CLI login instead of provider API keys. If you later want a
 server-only or GitHub Actions setup, use the upstream API backend options.
 
+## GitHub Actions Boundary
+
+The bundled GitHub workflow is manual-only in this fork. Scheduled Actions are
+disabled because GitHub-hosted runners cannot access the user's local CLI login;
+without a cloud LLM API key, scheduled cloud runs fail before report generation.
+Keep the daily schedule in Codex automation for the no-key workflow.
+
 ## Codex CLI Note
 
 This machine has `codex-cli`, but the current CLI model configuration did not

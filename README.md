@@ -108,6 +108,18 @@ Skill 也单独发布在：
 
 我的本机默认时间是每天 `08:30`，上海时区。
 
+## GitHub Actions
+
+这个仓库的 GitHub Actions 已改成手动触发，不再自动定时生成日报。
+
+原因很简单：GitHub 云端 runner 不能读取你本机已经登录的 Claude / Codex CLI，所以一旦让 Actions 定时跑，它还是需要 `ANTHROPIC_API_KEY`、`OPENAI_API_KEY` 或类似的云端 LLM Key。DailyBrief-Codex 的默认路线是本地无 Key 运行：
+
+```text
+Codex automation -> npm run codex:daily -> local CLI backend
+```
+
+如果你以后想把日报发布成 GitHub Pages，可以手动运行 Actions，并按上游方式配置云端 LLM backend 和对应 API Key；日常使用不需要这样做。
+
 ## Report Shape
 
 一轮日报通常会包含：
