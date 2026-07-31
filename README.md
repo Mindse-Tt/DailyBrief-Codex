@@ -1,41 +1,130 @@
-# DailyBrief-Codex
+<a id="top"></a>
 
-许惟的本地每日情报工作流：让 Codex 每天跑一次资讯抓取、模型摘要、市场信号和报告归档，然后把结果用中文总结给你。
+<div align="center">
 
-这不是一个单纯的 DailyBrief fork。这个版本把原项目改造成了更适合个人 AI 工作流的形态：
+# 📰 DailyBrief-Codex
 
-- 默认本地运行，不要求配置 LLM API Key
-- 用 `npm run codex:daily` 作为 Codex / 自动任务入口
-- 固定输出 HTML、Markdown、JSON，方便阅读、归档和二次加工
-- 内置 `dailybrief-codex` Skill，可以直接让 Codex 调用
-- 每天可由 Codex 自动任务触发，并在完成后给中文日报摘要
+**一套为 Codex 重新包装的本地每日情报工作流：每天自动抓取资讯、生成 AI 摘要、分析市场信号，并归档到桌面。**
 
-> Upstream: 本项目基于 [leiting-eric/DailyBrief](https://github.com/leiting-eric/DailyBrief) 改造，保留 MIT License 和原项目核心能力。这里的重点是 Codex-first 的本地自动化包装。
+让日报不再是“打开网页看一眼”，而是变成一个可以被 Codex 调用、复盘、二次加工和长期沉淀的个人情报系统。
 
-## Workflow
+<p>
+  <img src="https://img.shields.io/badge/Codex-first-111827?style=for-the-badge" alt="Codex first">
+  <img src="https://img.shields.io/badge/default-no%20LLM%20API%20Key-16a34a?style=for-the-badge" alt="No LLM API key by default">
+  <img src="https://img.shields.io/badge/archive-Desktop%20DailyBrief-2563eb?style=for-the-badge" alt="Desktop archive">
+  <img src="https://img.shields.io/badge/Node-20%2B-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node 20+">
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT license">
+</p>
 
-![DailyBrief-Codex workflow](docs/codex-flow.svg)
+</div>
+
+---
+
+## ✨ 这个版本做了什么
+
+DailyBrief-Codex 不是简单搬运一个日报项目，而是把它改成更适合个人 Agent 工作流的形态：
+
+| 能力 | DailyBrief-Codex 的做法 |
+|---|---|
+| 🤖 Codex 调用 | 用 `npm run codex:daily` 作为稳定入口，Codex 可直接运行、验收、总结 |
+| 🔐 默认无 Key | 默认走本机已登录的 `claude-cli` 后端，不要求再配置 LLM API Key |
+| 🧠 多源摘要 | 聚合技术、财经、时政、社区讨论和市场行情，再由 LLM 做中文日报 |
+| 📈 市场信号 | 跟踪 21 个美股 / 加密 / 中港 / 商品外汇 / 宏观标的，并生成技术指标点评 |
+| 📁 桌面归档 | 每天自动复制到 `~/Desktop/DailyBrief每日存档`，结构像 `AIHOT每日存档` |
+| 🧩 Skill 化 | 内置 `dailybrief-codex` Skill，也单独发布，方便在不同 Codex 环境调用 |
+| ☁️ 云端边界 | GitHub Actions 改成手动触发，日常不再因为云端没 API Key 失败刷通知 |
+
+---
+
+## 🧭 工作流
+
+<p align="center">
+  <img src="docs/codex-flow.svg" alt="DailyBrief-Codex workflow" width="780">
+</p>
 
 ```text
 Codex request / automation
   -> npm run codex:daily
-  -> fetch public RSS / JSON sources
+  -> fetch public RSS / JSON / API sources
   -> local CLI backend summarizes and ranks
   -> write HTML / Markdown / JSON
+  -> copy reports into Desktop archive
   -> Codex reads the report and returns a Chinese digest
 ```
 
-## What Makes It Different
+---
 
-| 原 DailyBrief | DailyBrief-Codex |
+## 🖼️ 报告预览
+
+### 技术动态
+
+<p align="center">
+  <img src="docs/screenshots/tech.png" alt="DailyBrief-Codex tech section preview" width="760">
+</p>
+
+覆盖 GitHub Trending、AI 公司博客、研究趋势、中文社区和海外技术媒体。
+
+### 市场行情
+
+<p align="center">
+  <img src="docs/screenshots/trading.png" alt="DailyBrief-Codex market section preview" width="760">
+</p>
+
+跟踪 SPY、QQQ、AAPL、MSFT、NVDA、GOOGL、TSLA、META、BTC、ETH、SOL、BABA、PDD、JD、腾讯、黄金、WTI 原油、美元/人民币、VIX、10Y 美债、DXY 等 21 个标的。
+
+### 财经要点
+
+<p align="center">
+  <img src="docs/screenshots/finance.png" alt="DailyBrief-Codex finance section preview" width="760">
+</p>
+
+聚合 Bloomberg、WSJ、Financial Times、BBC Business、Economist 等来源，提炼公司、宏观和资产价格线索。
+
+### 时政观察
+
+<p align="center">
+  <img src="docs/screenshots/politics.png" alt="DailyBrief-Codex politics section preview" width="760">
+</p>
+
+聚合 BBC、Guardian、NYT、NPR、DW 中文、Al Jazeera、The Diplomat 等国际要闻来源。
+
+---
+
+## 📚 数据源图谱
+
+当前配置：
+
+| 指标 | 数量 |
+|---|---:|
+| Source registry 总数 | 53 |
+| 默认启用 | 26 |
+| 中文模式有效 | 24 |
+
+按类型看：
+
+| 类别 | 代表来源 |
 |---|---|
-| 面向通用部署，README 重点是 GitHub Actions / API backend / Pages | 面向个人本地工作流，README 重点是 Codex 调用和每日自动汇报 |
-| GitHub Actions 模式通常需要 LLM API Key | 默认走本机已登录 CLI backend，不需要额外 LLM API Key |
-| 主要交付 HTML 页面 | 同时固定交付 HTML、Markdown、JSON，方便 Codex 读取和二次总结 |
-| Claude Code skill 是上游本地安装的一部分 | 额外内置 Codex Skill：`skills/dailybrief-codex/` |
-| 需要用户记运行命令和路径 | Skill 和 wrapper 固化路径发现、运行、验收、失败排查 |
+| 🧑‍💻 技术 / AI | GitHub Trending、OpenAI News、DeepMind Blog、Hugging Face Blog、TLDR AI、Smol AI、Latent Space、MIT Tech Review AI |
+| 💬 社区讨论 | V2EX、LinuxDo、Hacker News、Reddit r/stocks |
+| 💰 财经 | Bloomberg、WSJ、Financial Times、BBC Business、Economist |
+| 🌍 时政 | BBC World、Guardian、NYT World、NPR World、DW 中文、Al Jazeera、The Diplomat |
+| 📈 市场行情 | 美股、ETF、加密、中港、商品外汇、宏观指标 |
 
-## Quick Start
+查看当前启用状态：
+
+```bash
+npm run sources
+```
+
+切换语言：
+
+```bash
+REPORT_LOCALE=en npm run sources
+```
+
+---
+
+## 🚀 快速开始
 
 ```bash
 git clone https://github.com/Mindse-Tt/DailyBrief-Codex.git
@@ -55,7 +144,13 @@ REPORT_TZ=Asia/Shanghai
 OUTPUT_MARKDOWN=true
 ```
 
-生成结果：
+如果你已经在本机登录过 Claude CLI，这条路径默认不需要额外 LLM API Key。Codex 负责启动和总结，日报管线负责抓取、生成和归档。
+
+---
+
+## 📦 输出与归档
+
+每次运行会生成四类文件：
 
 ```text
 daily_reports/YYYY-MM-DD/YYYY-MM-DD.html
@@ -64,19 +159,28 @@ daily_reports/YYYY-MM-DD/YYYY-MM-DD.json
 daily_reports/YYYY-MM-DD/YYYY-MM-DD-articles.json
 ```
 
-同时会复制一份到桌面归档入口：
+同时复制一份到桌面归档入口：
 
 ```text
 ~/Desktop/DailyBrief每日存档/YYYY-MM-DD.html
 ~/Desktop/DailyBrief每日存档/YYYY-MM-DD.md
 ~/Desktop/DailyBrief每日存档/YYYY-MM-DD.json
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD-articles.json
 ```
 
-这个入口默认指向 `~/DailyBrief每日存档`，结构和 `AIHOT每日存档` 一样，方便每天直接从桌面打开。
+桌面入口默认指向：
 
-## Use As A Codex Skill
+```text
+~/DailyBrief每日存档
+```
 
-本仓库已内置 Skill：
+这样每天的结果会像 `AIHOT每日存档` 一样平铺保存，HTML 用来阅读，Markdown 用来复盘，JSON 用来二次处理。
+
+---
+
+## 🧩 Codex Skill
+
+仓库内置 Skill：
 
 ```text
 skills/dailybrief-codex/
@@ -89,75 +193,117 @@ mkdir -p ~/.codex/skills
 cp -R skills/dailybrief-codex ~/.codex/skills/
 ```
 
-如果 DailyBrief-Codex 不在默认位置，设置项目路径：
+如果项目不在默认位置，设置：
 
 ```bash
 export DAILYBRIEF_CODEX_ROOT=/absolute/path/to/DailyBrief-Codex
 ```
 
-然后对 Codex 说：
+之后可以直接对 Codex 说：
 
 ```text
 用 dailybrief-codex 跑今天日报并总结给我。
 ```
 
-Skill 也单独发布在：
+Skill 也可以作为单独工具使用：
 
-- [DailyBrief-Codex-Skill](https://github.com/Mindse-Tt/DailyBrief-Codex-Skill)
-- [xuwei_tools / dailybrief-codex](https://github.com/Mindse-Tt/xuwei_tools/tree/main/dailybrief-codex)
+| 位置 | 用途 |
+|---|---|
+| [DailyBrief-Codex-Skill](https://github.com/Mindse-Tt/DailyBrief-Codex-Skill) | 独立安装和更新 |
+| [xuwei_tools / dailybrief-codex](https://github.com/Mindse-Tt/xuwei_tools/tree/main/dailybrief-codex) | 许惟工具集合里的 Skill 条目 |
 
-## Daily Automation
+---
 
-推荐把它挂成每天早上的 Codex 自动任务：
+## ⏰ 每日自动化
+
+推荐用 Codex 自动任务每天早上触发：
 
 ```text
 进入 DailyBrief-Codex 仓库，运行 npm run codex:daily。
-成功后读取当天 Markdown / JSON，给我中文日报摘要，并附上 HTML 和 Markdown 路径。
+成功后读取当天 Markdown / JSON，给我中文日报摘要，并附上 HTML、Markdown 和桌面归档路径。
 失败时先看 logs/daily-YYYY-MM-DD.log，再给出原因和修复建议。
 ```
 
-我的本机默认时间是每天 `08:30`，上海时区。
+本机默认节奏：
 
-## GitHub Actions
+| 项目 | 配置 |
+|---|---|
+| 时间 | 每天 08:30 |
+| 时区 | Asia/Shanghai |
+| 运行方式 | Codex local automation |
+| 主要命令 | `npm run codex:daily` |
+| 失败日志 | `logs/daily-YYYY-MM-DD.log` |
 
-这个仓库的 GitHub Actions 已改成手动触发，不再自动定时生成日报。
+---
 
-原因很简单：GitHub 云端 runner 不能读取你本机已经登录的 Claude / Codex CLI，所以一旦让 Actions 定时跑，它还是需要 `ANTHROPIC_API_KEY`、`OPENAI_API_KEY` 或类似的云端 LLM Key。DailyBrief-Codex 的默认路线是本地无 Key 运行：
+## ☁️ GitHub Actions 边界
+
+这个版本的 GitHub Actions 是手动触发，不做自动定时。
+
+原因是 GitHub 云端 runner 无法读取你本机已经登录的 Claude / Codex CLI。只要让云端自动生成日报，就必须配置 `ANTHROPIC_API_KEY`、`OPENAI_API_KEY`、`DEEPSEEK_API_KEY` 或类似云端 LLM Key；这和本项目默认的“本地无 Key”路线不一致。
+
+推荐日常路径：
 
 ```text
-Codex automation -> npm run codex:daily -> local CLI backend
+Codex automation -> npm run codex:daily -> local CLI backend -> desktop archive
 ```
 
-如果你以后想把日报发布成 GitHub Pages，可以手动运行 Actions，并按上游方式配置云端 LLM backend 和对应 API Key；日常使用不需要这样做。
+需要临时在 GitHub 上手动跑时，再进入 Actions 页面选择 `Daily Brief`，配置云端 LLM backend 和对应 secret 后运行。
 
-## Report Shape
+---
 
-一轮日报通常会包含：
+## 🛠️ 常用命令
 
-- 今日总览：技术、财经、时政的合并主线
-- 技术动态：AI、开源、研究、产品发布
-- 财经要点：美股、宏观、公司财报、油价等
-- 时政观察：国际要闻和地缘风险
-- 市场行情：21 个美股 / 加密 / 中港 / 商品外汇标的的技术指标和模型点评
-- 本地归档：HTML 适合阅读，Markdown 适合复盘，JSON 适合二次处理
+| 命令 | 用途 | 是否调用 LLM |
+|---|---|---|
+| `npm run codex:daily` | Codex 推荐入口，完整生成并归档 | 是 |
+| `npm run daily` | 只跑日报生成管线 | 是 |
+| `npm run build-site` | 重建 `index.html` / `archive.html` | 否 |
+| `npm run dry-run` | 抓取源烟测，不做摘要 | 否 |
+| `npm run render [date]` | 重新渲染某天报告 | 否 |
+| `npm run regen-trading [date]` | 重做市场行情部分 | 是 |
+| `npm run quota-report` | 查看 LLM 调用记录 | 否 |
+| `npm run sources` | 查看数据源启用状态 | 否 |
+| `npm run open` | 打开最新 HTML 报告 | 否 |
 
-## Token And Runtime
+---
+
+## 🧠 Token 与耗时
 
 一次完整日报在本机实测大约：
 
-- 5 到 8 分钟
-- 8 次左右 LLM 调用
-- 约 3 万 LLM token 量级
+| 指标 | 量级 |
+|---|---:|
+| 运行时间 | 5 到 8 分钟 |
+| LLM 调用 | 约 8 次 |
+| LLM token | 约 3 万 |
 
-实际消耗取决于当天源数量、摘要长度和所选 backend。Codex 额外总结会再消耗少量 token。
+实际消耗会随当天资讯量、摘要长度、市场数据和所选 backend 变化。Codex 读完报告后再给你中文总结，会额外消耗少量 token。
 
-## Project Layout
+---
+
+## 🧯 排查问题
+
+| 现象 | 先看哪里 | 常见原因 |
+|---|---|---|
+| 没生成报告 | `logs/daily-YYYY-MM-DD.log` | 命令失败、依赖缺失、CLI 未登录 |
+| LLM 后端失败 | `logs/llm-calls.jsonl` | 本地 CLI 登录过期、模型不可用 |
+| 某个源抓取失败 | 终端输出 / 日志 | RSS 临时不可用、LinuxDo 被 Cloudflare 拦截 |
+| Codex 找不到项目 | `DAILYBRIEF_CODEX_ROOT` | 项目路径不在默认候选位置 |
+| Markdown 缺失 | `.env.local` | `OUTPUT_MARKDOWN` 没有开启 |
+| GitHub 红叉通知 | Actions run 详情 | 云端没有 LLM API Key；日常应走本地 Codex 自动化 |
+
+---
+
+## 🗂️ 项目结构
 
 ```text
 scripts/codex-daily.mjs          # Codex-friendly local runner
 codex.env.example                # No-key local default config
 CODEX.md                         # Codex automation and skill notes
 skills/dailybrief-codex/         # Installable Codex Skill
+docs/codex-flow.svg              # README workflow diagram
+docs/screenshots/                # Report preview images
 lib/sources/                     # Source fetchers
 lib/ai/                          # LLM backend, prompts, enrichment
 lib/trading/                     # Market watchlist and indicators
@@ -166,33 +312,8 @@ daily_reports/                   # Generated local reports, gitignored
 logs/                            # Run logs and LLM call logs, gitignored
 ```
 
-## Troubleshooting
+---
 
-| Problem | First Check |
-|---|---|
-| no report generated | `logs/daily-YYYY-MM-DD.log` |
-| LLM backend failed | `logs/llm-calls.jsonl` and local CLI login |
-| one source failed | usually non-fatal; LinuxDo may hit Cloudflare |
-| Codex cannot find repo | set `DAILYBRIEF_CODEX_ROOT` |
-| Markdown missing | ensure `OUTPUT_MARKDOWN=true` |
+## 📄 License
 
-## Relationship To Upstream
-
-Core fetching, rendering, source registry and many backend abstractions come from [leiting-eric/DailyBrief](https://github.com/leiting-eric/DailyBrief). This fork adds a personal Codex workflow layer:
-
-- `scripts/codex-daily.mjs`
-- `codex.env.example`
-- `CODEX.md`
-- `skills/dailybrief-codex/`
-- local no-key defaults and README repositioning
-- a safer local CLI spawn path for the CLI backend
-
-For the original full deployment matrix, API provider notes, and GitHub Actions Pages setup, refer to the upstream project:
-
-```text
-https://github.com/leiting-eric/DailyBrief
-```
-
-## License
-
-MIT. Upstream DailyBrief is MIT licensed; this fork keeps the same license and credits the original project.
+MIT.

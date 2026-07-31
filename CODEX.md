@@ -92,7 +92,8 @@ https://github.com/Mindse-Tt/xuwei_tools
 
 The source fetchers use public RSS/JSON endpoints. For the LLM step, local mode
 reuses the machine's CLI login instead of provider API keys. If you later want a
-server-only or GitHub Actions setup, use the upstream API backend options.
+server-only or GitHub Actions setup, switch to a cloud/API backend and configure
+the matching provider key.
 
 ## GitHub Actions Boundary
 

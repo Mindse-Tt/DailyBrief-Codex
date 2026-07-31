@@ -10,8 +10,8 @@ name: Daily Brief
 # choose to run this workflow manually from GitHub, configure a cloud LLM backend
 # and the matching API key in Settings -> Secrets and variables -> Actions.
 #
-# The upstream scheduled GitHub Actions trigger is intentionally disabled here
-# to avoid recurring failure emails in no-key local mode.
+# Scheduled GitHub Actions triggers are intentionally disabled here to avoid
+# recurring failure emails in no-key local mode.
 
 on:
   workflow_dispatch:
