@@ -64,6 +64,16 @@ daily_reports/YYYY-MM-DD/YYYY-MM-DD.json
 daily_reports/YYYY-MM-DD/YYYY-MM-DD-articles.json
 ```
 
+同时会复制一份到桌面归档入口：
+
+```text
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.html
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.md
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.json
+```
+
+这个入口默认指向 `~/DailyBrief每日存档`，结构和 `AIHOT每日存档` 一样，方便每天直接从桌面打开。
+
 ## Use As A Codex Skill
 
 本仓库已内置 Skill：

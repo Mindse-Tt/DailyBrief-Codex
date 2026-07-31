@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import os from "node:os";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -22,6 +23,7 @@ const env = {
   REPORT_LOCALE: process.env.REPORT_LOCALE || "zh",
   REPORT_TZ: process.env.REPORT_TZ || "Asia/Shanghai",
   OUTPUT_MARKDOWN: process.env.OUTPUT_MARKDOWN || "true",
+  DAILYBRIEF_ARCHIVE_DIR: process.env.DAILYBRIEF_ARCHIVE_DIR || path.join(os.homedir(), "DailyBrief每日存档"),
 };
 
 function nowTime() {
@@ -115,6 +117,43 @@ function printSummary(date) {
   if (fs.existsSync(mdPath)) console.log(`markdown: ${mdPath}`);
 }
 
+function ensureDesktopArchiveLink(archiveDir, logStream) {
+  const desktopDir = path.join(os.homedir(), "Desktop");
+  const linkPath = path.join(desktopDir, "DailyBrief每日存档");
+  if (!fs.existsSync(desktopDir) || fs.existsSync(linkPath)) return;
+
+  try {
+    fs.symlinkSync(archiveDir, linkPath, "dir");
+    logLine(logStream, `[codex-daily] desktop archive link: ${linkPath}`);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    logLine(logStream, `[codex-daily] desktop archive link skipped: ${message}`);
+  }
+}
+
+function archiveReport(date, logStream) {
+  const reportDir = path.join(projectRoot, "daily_reports", date);
+  const archiveDir = env.DAILYBRIEF_ARCHIVE_DIR;
+  fs.mkdirSync(archiveDir, { recursive: true });
+  ensureDesktopArchiveLink(archiveDir, logStream);
+
+  const copies = [
+    [`${date}.html`, `${date}.html`],
+    [`${date}.md`, `${date}.md`],
+    [`${date}.json`, `${date}.json`],
+    [`${date}-articles.json`, `${date}-articles.json`],
+  ];
+
+  for (const [sourceName, archiveName] of copies) {
+    const sourcePath = path.join(reportDir, sourceName);
+    if (fs.existsSync(sourcePath)) {
+      fs.copyFileSync(sourcePath, path.join(archiveDir, archiveName));
+    }
+  }
+
+  logLine(logStream, `[codex-daily] archive: ${archiveDir}`);
+}
+
 const date = todayKey(env.REPORT_TZ);
 const { logFile, logStream } = createLogStream(date);
 
@@ -126,6 +165,7 @@ try {
   logLine(logStream, `[codex-daily] log=${logFile}`);
   await run("npm", ["run", "daily"], logStream);
   await run("npm", ["run", "build-site"], logStream);
+  archiveReport(date, logStream);
   printSummary(todayKey(env.REPORT_TZ));
   logStream.write(`[${nowTime()}] codex-daily OK\n`);
 } catch (err) {

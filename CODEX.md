@@ -34,6 +34,17 @@ daily_reports/YYYY-MM-DD/YYYY-MM-DD.md
 daily_reports/YYYY-MM-DD/YYYY-MM-DD.json
 ```
 
+A desktop archive copy is also maintained at:
+
+```text
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.html
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.md
+~/Desktop/DailyBrief每日存档/YYYY-MM-DD.json
+```
+
+The desktop entry points to `~/DailyBrief每日存档`, matching the user's
+`AIHOT每日存档` layout.
+
 ## Daily Codex Automation
 
 Use a Codex cron automation with this workspace and prompt:
